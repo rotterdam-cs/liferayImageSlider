@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-    <artifactId>linkedin-project</artifactId>
-    <groupId>com.liferay.portal</groupId>
-    <version>1.0-SNAPSHOT</version>
-  </parent>
+
 	<groupId>com.rotterdam</groupId>
 	<artifactId>slider-portlet</artifactId>
 	<packaging>war</packaging>
 	<name>slider-portlet Portlet</name>
 	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<liferay.dir>D:/rotterdam/liferay-portal-6.1.0-ce-ga1</liferay.dir>
+		<liferay.auto.deploy.dir>${liferay.dir}/deploy</liferay.auto.deploy.dir>
+		<liferay.version>6.1.0</liferay.version>
+		<liferay.tomcat.dir>${liferay.dir}/tomcat-7.0.23</liferay.tomcat.dir>
+		<liferay.root.dir>${liferay.tomcat.dir}/webapps/ROOT</liferay.root.dir>
+		<liferay.classes.dir>${liferay.root.dir}/WEB-INF/classes</liferay.classes.dir>
+		<liferay.lib.dir>${liferay.root.dir}/WEB-INF/lib</liferay.lib.dir>
+		<liferay.deploy.dir>${liferay.dir}/deploy</liferay.deploy.dir>
+	</properties>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -37,7 +46,7 @@
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
-     		</plugins>
+		</plugins>
 	</build>
 	<dependencies>
 		<dependency>
