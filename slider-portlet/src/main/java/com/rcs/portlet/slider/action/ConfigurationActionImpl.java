@@ -17,6 +17,7 @@
 package com.rcs.portlet.slider.action;
 
 import java.util.Date;
+import java.util.Enumeration;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -48,11 +49,11 @@ public class ConfigurationActionImpl implements ConfigurationAction {
 		}
 
 		public void processAction(PortletConfig portletConfig,
-										ActionRequest actionRequest,
-										ActionResponse actionResponse)
+										ActionRequest request,
+										ActionResponse response)
 										throws Exception {
 
-				String cmd = actionRequest.getParameter(SliderConstants.CMD);
+				String cmd = request.getParameter(SliderConstants.CMD);
 
 				if (Validator.isNull(cmd)) {
 						throw new Exception("exception-occurred");
@@ -60,25 +61,65 @@ public class ConfigurationActionImpl implements ConfigurationAction {
 
 				try {
 						if (cmd.equals(SliderConstants.UPDATE)) {
-								savePreferences(actionRequest, actionResponse);
+								savePreferences(request, response);
+								response.setRenderParameter("tab", "slides");
 						}
 						else if (cmd.equals(SliderConstants.DELETE)) {
-								deleteSlide(actionRequest, actionResponse);
+								deleteSlide(request, response);
+								response.setRenderParameter("tab", "slides");
+						}
+						else if (cmd.equals(SliderConstants.UPDATE_SETTINGS)) {
+
+								String tab = ParamUtil.getString(request, "tab");
+								if (tab != null)
+										response.setRenderParameter("tab", tab);
+
+								updateAnimation(request, response);
+
 						}
 
-						SessionMessages.add(actionRequest,
-								"request-successfully",
-								portletConfig.getPortletName() + ".doConfigure");
-
-						return;
+						SessionMessages.add(request, "request-successfully");
 				}
 				catch (Exception e) {
-
 						_log.error(e.getMessage());
-						SessionErrors.add(actionRequest, e.getMessage());
-
-						return;
+						SessionErrors.add(request, e.getMessage());
 				}
+
+		}
+
+		private void updateAnimation(ActionRequest actionRequest,
+										ActionResponse actionResponse)
+										throws Exception {
+
+				_log.info("updateAnimation - start");
+
+				String portletResource = ParamUtil.getString(actionRequest,
+						"portletResource");
+				PortletPreferences preferences = PortletPreferencesFactoryUtil
+												.getPortletSetup(actionRequest,
+														portletResource);
+
+				Enumeration<String> parameterNames = actionRequest
+												.getParameterNames();
+
+				while (parameterNames.hasMoreElements()) {
+
+						String param = parameterNames.nextElement();
+						if (param.startsWith("settings")) {
+
+								String value = ParamUtil.get(actionRequest,
+										param, "");
+								_log.info("save param=" + param + ", value="
+										  + value);
+
+								preferences.setValue(param, value);
+						}
+				}
+
+				preferences.store();
+
+				_log.info("updateAnimation - end");
+
 		}
 
 		private void deleteSlide(ActionRequest request, ActionResponse response)

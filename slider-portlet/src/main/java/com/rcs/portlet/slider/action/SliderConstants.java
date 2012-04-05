@@ -18,7 +18,7 @@ package com.rcs.portlet.slider.action;
 
 /**
  * @author Rajesh
- *
+ * 
  */
 public interface SliderConstants {
 
@@ -31,5 +31,21 @@ public interface SliderConstants {
 		String DELETE = "DELETE";
 
 		String SAVE = "SAVE";
+
+		String UPDATE_SETTINGS = "UPDATE_SETTINGS";
+
+		String UPDATE_LOOK_AND_FEEL = "UPDATE_LOOK_AND_FEEL";
+
+		String UPDATE_SLIDE_NAVIGATION = "UPDATE_SLIDE_NAVIGATION";
+
+		String TEXTBOX = "TEXTBOX";
+
+		String TAB_SLIDES = "slides";
+
+		String TAB_SLIDES_ANIMATION = "slideAnimation";
+
+		String TAB_SLIDES_LOOK_AND_FEEL = "slideLookAndFeel";
+
+		String TAB_SLIDES_NAVIGATION = "slideNav";
 
 }
