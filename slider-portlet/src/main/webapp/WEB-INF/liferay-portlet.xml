@@ -4,7 +4,7 @@
 <liferay-portlet-app>
 	<portlet>
 		<portlet-name>slider-portlet</portlet-name>
-		<icon>/icon.png</icon>
+		<icon>/nivo.png</icon>
 		<configuration-action-class>com.rcs.portlet.slider.action.ConfigurationActionImpl</configuration-action-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
