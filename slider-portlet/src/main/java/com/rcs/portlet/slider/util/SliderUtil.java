@@ -190,10 +190,15 @@ public class SliderUtil {
 				return settings.toString();
 		}
 
-		public static Slide getSlide(PortletRequest request, String slideId) {
+		public static Slide getSlide(PortletRequest request, String slideId)
+										throws PortalException, SystemException {
 
-				PortletPreferences preferences = request.getPreferences();
-				String[] values = preferences.getValues(slideId, null);
+				String portletResource = ParamUtil.getString(request,
+						"portletResource");
+				PortletPreferences portletPreferences = getPreference(request,
+						portletResource);
+
+				String[] values = portletPreferences.getValues(slideId, null);
 
 				if (Validator.isNotNull(values)) {
 						return getSlide(slideId, values);
