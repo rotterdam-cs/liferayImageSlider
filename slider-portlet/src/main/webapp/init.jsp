@@ -31,6 +31,7 @@
 <%@page import="com.liferay.portal.kernel.util.StringBundler"%>
 
 <%@page import="com.liferay.portal.util.PortalUtil"%>
+<%@page import="com.liferay.util.portlet.PortletProps"%>
 
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil"%>
 
@@ -45,13 +46,13 @@
 <%@page import="com.rcs.portlet.slider.action.SliderConstants"%>
 <%@page import="com.rcs.portlet.slider.model.Slide"%>
 <%@page import="com.rcs.portlet.slider.util.SliderUtil"%>
+<%@page import="com.rcs.portlet.slider.util.SliderParamUtil"%>
 
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui"%>
 <%@ taglib uri="http://java.sun.com/portlet" prefix="portlet"%>
 <%@ taglib uri="http://liferay.com/tld/portlet" prefix="liferay-portlet"%>
 <%@ taglib uri="http://alloy.liferay.com/tld/aui" prefix="aui"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
 
 <portlet:defineObjects />
 
