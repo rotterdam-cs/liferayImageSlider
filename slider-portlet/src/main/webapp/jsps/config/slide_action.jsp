@@ -26,29 +26,45 @@ Slide slide = (Slide)row.getObject();
 String slideId = "slides_" + slide.getId();
 %>
 
+<liferay-portlet:renderURL portletConfiguration="true" var="slideUpURL" >
+	<liferay-portlet:param name="slideId" value="<%=slideId%>" />
+	<liferay-portlet:param name="<%=SliderConstants.CMD %>" value="<%=SliderConstants.SLIDE_MOVE_UP%>" />
+	<liferay-portlet:param name="tab" value="<%=SliderConstants.TAB_SLIDES%>" />
+</liferay-portlet:renderURL>
+		
+<liferay-ui:icon
+		image="top" message="slide-up"
+		url="<%= slideUpURL.toString() %>"
+/>
+
+<liferay-portlet:renderURL portletConfiguration="true" var="slideDownURL" >
+	<liferay-portlet:param name="slideId" value="<%=slideId%>" />
+	<liferay-portlet:param name="<%=SliderConstants.CMD %>" value="<%=SliderConstants.SLIDE_MOVE_DOWN%>" />
+	<liferay-portlet:param name="tab" value="<%=SliderConstants.TAB_SLIDES%>" />
+</liferay-portlet:renderURL>
+
+<liferay-ui:icon
+		image="bottom" message="slide-down"
+		url="<%= slideDownURL.toString() %>"
+/>
+
 <liferay-portlet:renderURL portletConfiguration="true" var="updateURL" >
 	<liferay-portlet:param name="slideParamId" value="<%=slideId%>" />
 </liferay-portlet:renderURL>
 
 <liferay-ui:icon
-		image="edit" label=""
+		image="edit"
 		url="<%= updateURL %>"
 />
-		
-<%
 
-StringBuilder confirmJsSb = new StringBuilder(5);
-confirmJsSb.append("javascript:if (confirm('");
-confirmJsSb.append(
-	UnicodeLanguageUtil.get(
-		pageContext, "are-you-sure-you-want-to-delete-slide"));
-confirmJsSb.append("')) { ");
-confirmJsSb.append("deleteSlide('" + slideId + "')");
-confirmJsSb.append(" } else { self.focus(); }");
+<liferay-portlet:renderURL portletConfiguration="true" var="deleteURL" >
+	<liferay-portlet:param name="slideId" value="<%=slideId%>" />
+	<liferay-portlet:param name="<%=SliderConstants.CMD %>" value="<%=SliderConstants.DELETE%>" />
+	<liferay-portlet:param name="tab" value="<%=SliderConstants.TAB_SLIDES%>" />
+</liferay-portlet:renderURL >
 
-%>
 <span> 
-	<a href="<%=confirmJsSb.toString() %>" class="taglib-icon">
+	<a href="<%=deleteURL.toString() %>" onclick="return confirmDeleteSlide()" class="taglib-icon">
 	 <img title="Delete"
 	  alt="Delete" src="/html/themes/classic/images/common/delete.png" 
 	  class="icon">

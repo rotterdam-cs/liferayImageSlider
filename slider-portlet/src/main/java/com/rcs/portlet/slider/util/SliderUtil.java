@@ -18,9 +18,12 @@ package com.rcs.portlet.slider.util;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -43,6 +46,30 @@ public class SliderUtil {
 										PortletResponse response)
 										throws PortalException, SystemException {
 
+				return getSlidesByComparator(request, response,
+						new OrderComparator());
+		}
+
+		public static int getLastSlide(ActionRequest request,
+										ActionResponse response)
+										throws PortalException, SystemException {
+
+				List<Slide> slidesByOrder = getSlides(request, response);
+				if (slidesByOrder != null && slidesByOrder.size() > 0) {
+						Slide slide = slidesByOrder.get(slidesByOrder.size() - 1);
+						if (slide != null) {
+								return slide.getOrder() + 1;
+						}
+				}
+
+				return 0;
+		}
+
+		public static List<Slide> getSlidesByComparator(PortletRequest request,
+										PortletResponse response,
+										Comparator<Slide> comparator)
+										throws PortalException, SystemException {
+
 				String portletResource = ParamUtil.getString(request,
 						"portletResource");
 				PortletPreferences portletPreferences = getPreference(request,
@@ -52,7 +79,6 @@ public class SliderUtil {
 				Enumeration<String> prefMap = portletPreferences.getNames();
 
 				while (prefMap.hasMoreElements()) {
-
 						String slideId = prefMap.nextElement();
 						if (slideId.startsWith("slides_")) {
 								String[] values = portletPreferences.getValues(
@@ -64,7 +90,7 @@ public class SliderUtil {
 						}
 				}
 
-				Collections.sort(slides, new DateComparator());
+				Collections.sort(slides, comparator);
 
 				return slides;
 		}
@@ -207,6 +233,17 @@ public class SliderUtil {
 				return new Slide();
 		}
 
+		public static Long getSlideId(String slideId) {
+
+				if (Validator.isNotNull(slideId)) {
+						slideId = slideId.replaceAll("slides_", "");
+
+						return Long.parseLong(slideId);
+				}
+
+				return null;
+		}
+
 		public static Slide getSlide(String slideId, String[] values) {
 
 				String title = values[0];
@@ -214,9 +251,11 @@ public class SliderUtil {
 				String desc = values[2];
 				String imageUrl = values[3];
 				String timeMillis = values[4];
+				String order = values[5];
 
 				Slide slide = new Slide(slideId, title, link, imageUrl, desc,
-										timeMillis, 0);
+										timeMillis, Integer.parseInt(order));
 				return slide;
 		}
+
 }

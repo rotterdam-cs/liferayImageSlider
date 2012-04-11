@@ -16,6 +16,7 @@
  */
  --%>
   
+<%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@include file="/init.jsp" %>
 
 <aui:fieldset label="Slides" cssClass="slides">
@@ -51,7 +52,7 @@
 			ResultRow row = new ResultRow(slide, slide.getId(), 1);
 			
 			row.addText(slide.getTitle());
-			row.addText(String.valueOf(slide.getId()));
+			row.addText(String.valueOf(slide.getOrder()));
 					
 			row.addJSP("center", SearchEntry.DEFAULT_VALIGN, "/jsps/config/slide_action.jsp",
 					config.getServletContext(), request, response);
@@ -69,23 +70,24 @@
 
 </aui:fieldset>
 
-<liferay-portlet:actionURL portletConfiguration="true"  var="deleteURL" >
-</liferay-portlet:actionURL >
-
-<aui:form action="<%=deleteURL.toString()%>" method="post" name="deleteFm">
-	<aui:input type="hidden" name="<%=SliderConstants.CMD%>" value="<%=SliderConstants.DELETE%>"/>
-	<aui:input type="hidden" name="slideId" id="deleteSlideId" value=""/>
-</aui:form>
-
 <style>
 .slides .aui-legend{
 	border-bottom: 0px none !important; 
 }
+.slides .results-header th.last{
+	text-align: center;
+}
 </style>
 
 <aui:script>
-	function deleteSlide(slideId){
-		document.<portlet:namespace />deleteFm.<portlet:namespace />deleteSlideId.value = slideId;
-		document.<portlet:namespace />deleteFm.submit();
+	function confirmDeleteSlide(){
+		if (confirm('<liferay-ui:message key="are-you-sure-you-want-to-delete-slide"/>')){
+		 	return true;
+		}else{
+			self.focus(); 
+			return false;
+		}
+		
+		return false;
 	}
 </aui:script>		

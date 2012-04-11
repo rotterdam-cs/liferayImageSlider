@@ -48,4 +48,8 @@ public interface SliderConstants {
 
 		String TAB_SLIDES_NAVIGATION = "slideNav";
 
+		String SLIDE_MOVE_DOWN = "SLIDE_MOVE_DOWN";
+
+		String SLIDE_MOVE_UP = "SLIDE_MOVE_UP";
+
 }
