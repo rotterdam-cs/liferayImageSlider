@@ -11,7 +11,7 @@ Author URI: http://dev7studios.com
 */
 
 .theme-pascal.slider-wrapper {
-    background:url(/slider-portlet/css/pascal/slider.png) no-repeat;
+    background:url(slider.png) no-repeat;
     width:668px;
     height:299px;
     margin:0 auto;
@@ -40,7 +40,7 @@ Author URI: http://dev7studios.com
 }
 
 .theme-pascal .nivo-controlNav {
-    background:url(/slider-portlet/css/pascal/controlnav.png) no-repeat;
+    background:url(controlnav.png) no-repeat;
     width:251px;
     height:40px;
     position:absolute;
@@ -53,7 +53,7 @@ Author URI: http://dev7studios.com
     display:block;
     width:22px;
     height:22px;
-    background:url(/slider-portlet/css/pascal/bullets.png) no-repeat;
+    background:url(bullets.png) no-repeat;
     text-indent:-9999px;
     border:0;
     margin-right:3px;
@@ -94,7 +94,7 @@ Author URI: http://dev7studios.com
 }
 
 .theme-pascal .ribbon {
-    background:url(/slider-portlet/css/pascal/ribbon.png) no-repeat;
+    background:url(ribbon.png) no-repeat;
     width:111px;
     height:111px;
     position:absolute;

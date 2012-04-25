@@ -18,7 +18,7 @@
  
 <%@include file="/init.jsp" %>
 
-<script type="text/javascript" src="/slider-portlet/js/jquery-1.7.1.min.js"></script>
+<%@include file="/jsps/config/js/jquery-1.7.1.min.js.jsp" %>
 
 <%
 	String tabValue = ParamUtil.getString(request, "tab", "slides");
