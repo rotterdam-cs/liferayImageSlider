@@ -56,10 +56,10 @@
 	<center><b><liferay-ui:message key="no-slides-configured-message"></liferay-ui:message></b></center>
 <% } %>
 
-<link rel="stylesheet" href="/slider-portlet/css/<%=themeValue%>/<%=themeValue%>.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="/slider-portlet/css/nivo-slider.css" type="text/css" media="screen" />
-<script type="text/javascript" src="/slider-portlet/js/jquery-1.7.1.min.js"></script>
-<script type="text/javascript" src="/slider-portlet/js/jquery.nivo.slider.pack.js"></script>
+<link rel="stylesheet" href="<%=renderRequest.getContextPath()%>/css/<%=themeValue%>/<%=themeValue%>.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="<%=renderRequest.getContextPath()%>/css/nivo-slider.css" type="text/css" media="screen" />
+<script type="text/javascript" src="<%=renderRequest.getContextPath()%>/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="<%=renderRequest.getContextPath()%>/js/jquery.nivo.slider.pack.js"></script>
 
 <script type="text/javascript">
 	$(window).load(function() {
