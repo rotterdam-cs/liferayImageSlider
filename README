@@ -1,4 +1,4 @@
-Liferay Image Slider plugin v1.0
+Liferay Image Slider plugin v1.1
 
 # Overview
 
@@ -7,6 +7,10 @@ A JQuery Image Slider plugin for Liferay built by Rotterdam Community Solutions 
 # Requirements
 
 Liferay 6.1 or higher
+
+# Upgrading from v1.0 or older
+
+Please deinstall v1.0 completely before installing version 1.1, as the name and artifact id have been corrected in this version.
 
 # Running it
 

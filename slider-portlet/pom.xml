@@ -3,14 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.rotterdam</groupId>
-	<artifactId>slider-portlet</artifactId>
+	<groupId>com.rcs</groupId>
+	<artifactId>rcs-slider-portlet</artifactId>
 	<packaging>war</packaging>
-	<name>slider-portlet Portlet</name>
-	<version>1.0-SNAPSHOT</version>
+	<name>RCS Image Slider Portlet</name>
+	<version>1.1</version>
 
 	<properties>
-		<liferay.dir>D:/rotterdam/liferay-portal-6.1.0-ce-ga1</liferay.dir>
+		<liferay.dir>/opt/liferay/</liferay.dir>
 		<liferay.auto.deploy.dir>${liferay.dir}/deploy</liferay.auto.deploy.dir>
 		<liferay.version>6.1.0</liferay.version>
 		<liferay.tomcat.dir>${liferay.dir}/tomcat-7.0.23</liferay.tomcat.dir>
