@@ -38,7 +38,7 @@ import com.rcs.portlet.slider.model.Slide;
 
 /**
  * @author Rajesh
- * 
+ *
  */
 public class SliderUtil {
 
@@ -190,14 +190,16 @@ public class SliderUtil {
 				settings.append(", slices:" + slicesValue);
 				settings.append(", boxCols:" + boxColumnValue);
 
-				if (Validator.isNull(animationSpeedValue))
+				if (Validator.isNotNull(animationSpeedValue) && Validator.isNumber(animationSpeedValue))
 						settings.append(", animSpeed:" + animationSpeedValue);
-				if (Validator.isNull(pauseTimeValue))
+				if (Validator.isNotNull(pauseTimeValue) && Validator.isNumber(pauseTimeValue))
 						settings.append(", pauseTime:" + pauseTimeValue);
 				if (Validator.isNull(startSlideValue)
 					&& Validator.isNumber(startSlideValue))
 						settings.append(", startSlide:" + startSlideValue);
-				settings.append(", randomStart:" + randomSlideValue);
+
+				if (Validator.isNotNull(randomSlideValue) && Validator.isNumber(randomSlideValue))
+						settings.append(", randomStart:" + randomSlideValue);
 
 				settings.append(", directionNav:" + directionNav);
 				settings.append(", directionNavHide:" + autoHideNav);
