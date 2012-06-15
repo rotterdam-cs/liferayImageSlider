@@ -58,7 +58,7 @@
 	<aui:input name="<%=SliderConstants.CMD%>" type="hidden" value="<%=SliderConstants.UPDATE%>" />
 	<aui:input name="image" id="slideImage" type="hidden" value="<%=slideImage%>" />
 	
-	<aui:fieldset label="Slide Detail">
+	<aui:fieldset label="slide.detail">
 			<aui:layout>
 				<aui:column columnWidth="50">
 				
@@ -76,7 +76,7 @@
 					<br>
 					<b>Image Preview</b>
 					<br>
-					<aui:button name="imageButton" type="button" value="Choose Image" 
+					<aui:button name="imageButton" type="button" value="button.choose.image"
 							onClick="selectImage()" />
 					<br>		
 					<img id="imagePreview" src="<%=slideImage%>" width="170" 

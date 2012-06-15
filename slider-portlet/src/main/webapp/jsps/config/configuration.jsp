@@ -34,7 +34,7 @@
 </liferay-portlet:renderURL>
 
 <liferay-ui:tabs
-    names="Slides,Slide Animation,Slide Look & Feel,Slide Navigation" 
+    names="slides,slide.animation,slide.look.and.feel,slide.navigation"
     value="<%=tabValue%>"
     param="tab"
     url="<%= slidesURL %>"

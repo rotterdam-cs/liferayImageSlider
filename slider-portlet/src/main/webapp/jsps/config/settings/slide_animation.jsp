@@ -22,8 +22,7 @@
 
 	String portletResource = ParamUtil.getString(renderRequest, "portletResource");
 								 
-	PortletPreferences preferences = SliderUtil
-										.getPreference(renderRequest, portletResource);
+	PortletPreferences preferences = SliderUtil.getPreference(renderRequest, portletResource);
 
 	String effectSelectedValue = preferences.getValue(SliderParamUtil.SETTINGS_EFFECT, "random");
 	String slicesValue = preferences.getValue(SliderParamUtil.SETTINGS_SLICES, "15");
@@ -37,7 +36,7 @@
 
 <liferay-portlet:actionURL portletConfiguration="true" var="actionURL" />
 
-<aui:fieldset label="Slide Animation">
+<aui:fieldset label="slide.animation">
 
 	<aui:form action="<%=actionURL.toString()%>" method="post" name="fm">
 

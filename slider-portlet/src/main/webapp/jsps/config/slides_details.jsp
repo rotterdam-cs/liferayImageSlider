@@ -19,7 +19,7 @@
 <%@page import="com.liferay.portal.kernel.portlet.LiferayWindowState"%>
 <%@include file="/init.jsp" %>
 
-<aui:fieldset label="Slides" cssClass="slides">
+<aui:fieldset label="slides" cssClass="slides">
 <%
 	 Locale  locale = renderRequest.getLocale();
 								 
