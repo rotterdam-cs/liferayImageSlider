@@ -62,10 +62,9 @@
 			<aui:layout>
 				<aui:column columnWidth="50">
 				
-					<aui:input cssClass="input-text" type="text" name="title" label="Title" />
-					<aui:input cssClass="input-text" type="text" name="link" label="Link" />
-					<aui:input cssClass="input-text" type="textarea" label="Text"
-							rows="3" cols="20" name="desc" />
+					<aui:input cssClass="input-text" type="text" name="title" label="slide.title" />
+					<aui:input cssClass="input-text" type="text" name="link" label="slide.link" />
+					<aui:input cssClass="input-text" type="textarea" label="slide.text" rows="3" cols="20" name="desc" />
 					<aui:button-row>
 						<aui:button name="saveButton" cssClass="save-btn" type="submit"
 						value="save" />
