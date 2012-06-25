@@ -35,8 +35,7 @@
 	
 	connectorURL += HttpUtil.encodeURL(resourceSelectorParam);
 		
-	String slideId = request.getParameter("slideParamId") != null 
-						? request.getParameter("slideParamId") : "";
+	String slideId = request.getParameter("slideParamId") != null ? request.getParameter("slideParamId") : "";
 						
 	String slideImage = "";				
 	Slide slide = null;
@@ -66,8 +65,7 @@
 					<aui:input cssClass="input-text" type="text" name="link" label="slide.link" />
 					<aui:input cssClass="input-text" type="textarea" label="slide.text" rows="3" cols="20" name="desc" />
 					<aui:button-row>
-						<aui:button name="saveButton" cssClass="save-btn" type="submit"
-						value="save" />
+						<aui:button name="saveButton" cssClass="save-btn" type="submit" value="save" />
 					</aui:button-row>
 				</aui:column>
 	
