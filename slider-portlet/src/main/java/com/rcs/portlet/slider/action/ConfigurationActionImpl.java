@@ -1,3 +1,4 @@
+/*=== new version ===*/
 /**
  * Copyright (C) Rotterdam Community Solutions B.V.
  * http://www.rotterdam-cs.com
@@ -16,19 +17,6 @@
 
 package com.rcs.portlet.slider.action;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
@@ -36,9 +24,18 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.rcs.portlet.slider.model.Slide;
 import com.rcs.portlet.slider.util.SliderUtil;
+import com.rcs.portlet.slider.util.webcontent.SliderArticle;
+import com.rcs.portlet.slider.util.webcontent.SliderArticleUtil;
+
+import javax.portlet.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
 
 /**
  * @author Rajesh
@@ -235,15 +232,34 @@ public class ConfigurationActionImpl implements ConfigurationAction {
 				String portletResource = ParamUtil.getString(request,
 						"portletResource");
 
-				PortletPreferences portletPreferences = PortletPreferencesFactoryUtil
-												.getPortletSetup(request,
-														portletResource);
+				PortletPreferences portletPreferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 
-				String slideId = ParamUtil.getString(request, "slideId", null);
-				String title = ParamUtil.getString(request, "title", "");
-				String link = ParamUtil.getString(request, "link", "");
-				String desc = ParamUtil.getString(request, "desc", "");
-				String image = ParamUtil.getString(request, "image", "");
+                ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+                String languageId = themeDisplay.getLanguageId();
+
+                long articleId = ParamUtil.getLong(request, "web-content");
+
+
+
+                SliderArticle sliderArticle = null;
+                if (articleId > 0) {
+                    sliderArticle = SliderArticleUtil.getSliderArticle(articleId, languageId);
+                }
+
+                String slideId = "";
+                String title = "";
+                String link = "";
+                String desc = "";
+                String image = "";
+
+                if (sliderArticle != null) {
+
+                    slideId = ParamUtil.getString(request, "slideId", null);
+                    title = sliderArticle.getTitle();
+                    link = sliderArticle.getLink();
+				    desc = sliderArticle.getText();
+                    image = sliderArticle.getImage();
+                }
 
 				if (_log.isDebugEnabled()) {
 						_log.debug("savePreferences - slideId=" + slideId

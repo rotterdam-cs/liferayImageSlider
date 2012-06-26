@@ -1,3 +1,4 @@
+/*=== new version ===*/
 /**
  * Copyright (C) Rotterdam Community Solutions B.V.
  * http://www.rotterdam-cs.com
@@ -16,18 +17,6 @@
 
 package com.rcs.portlet.slider.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -35,6 +24,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.rcs.portlet.slider.model.Slide;
+
+import javax.portlet.*;
+import java.util.*;
 
 /**
  * @author Rajesh
