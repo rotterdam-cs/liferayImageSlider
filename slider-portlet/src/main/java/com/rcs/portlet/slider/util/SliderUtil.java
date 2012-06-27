@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.rcs.portlet.slider.model.Slide;
@@ -38,8 +39,7 @@ public class SliderUtil {
 										PortletResponse response)
 										throws PortalException, SystemException {
 
-				return getSlidesByComparator(request, response,
-						new OrderComparator());
+				return getSlidesByComparator(request, response, new OrderComparator());
 		}
 
 		public static int getLastSlide(ActionRequest request,
@@ -57,35 +57,36 @@ public class SliderUtil {
 				return 0;
 		}
 
-		public static List<Slide> getSlidesByComparator(PortletRequest request,
-										PortletResponse response,
-										Comparator<Slide> comparator)
-										throws PortalException, SystemException {
+        public static List<Slide> getSlidesByComparator(PortletRequest request,
+                                                        PortletResponse response,
+                                                        Comparator<Slide> comparator)
+                throws PortalException, SystemException {
 
-				String portletResource = ParamUtil.getString(request,
-						"portletResource");
-				PortletPreferences portletPreferences = getPreference(request,
-						portletResource);
+            String portletResource = ParamUtil.getString(request, "portletResource");
 
-				List<Slide> slides = new ArrayList<Slide>();
-				Enumeration<String> prefMap = portletPreferences.getNames();
+            PortletPreferences portletPreferences = getPreference(request, portletResource);
 
-				while (prefMap.hasMoreElements()) {
-						String slideId = prefMap.nextElement();
-						if (slideId.startsWith("slides_")) {
-								String[] values = portletPreferences.getValues(
-										slideId, null);
-								if (Validator.isNotNull(values)) {
-										Slide slide = getSlide(slideId, values);
-										slides.add(slide);
-								}
-						}
-				}
+            List<Slide> slides = new ArrayList<Slide>();
+            Enumeration<String> prefMap = portletPreferences.getNames();
 
-				Collections.sort(slides, comparator);
+            ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
+            String languageId = themeDisplay.getLanguageId();
 
-				return slides;
-		}
+            while (prefMap.hasMoreElements()) {
+                String slideId = prefMap.nextElement();
+                if (slideId.startsWith("slides_") && slideId.endsWith(languageId)) {
+                    String[] values = portletPreferences.getValues(slideId, null);
+                    if (Validator.isNotNull(values)) {
+                        Slide slide = getSlide(slideId, values);
+                        slides.add(slide);
+                    }
+                }
+            }
+
+            Collections.sort(slides, comparator);
+
+            return slides;
+        }
 
 		public static PortletPreferences getPreference(PortletRequest request,
 										String portletResource)
@@ -93,8 +94,7 @@ public class SliderUtil {
 
 				if (portletResource == null
 					|| portletResource.trim().equals("")) {
-						ThemeDisplay themeDisplay = (ThemeDisplay) request
-														.getAttribute("THEME_DISPLAY");
+						ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute("THEME_DISPLAY");
 						portletResource = themeDisplay.getPortletDisplay()
 														.getId();
 				}
@@ -107,8 +107,7 @@ public class SliderUtil {
 										PortletResponse renderResponse)
 										throws PortalException, SystemException {
 
-				List<Slide> slides = SliderUtil.getSlides(renderRequest,
-						renderResponse);
+				List<Slide> slides = SliderUtil.getSlides(renderRequest,renderResponse);
 
 				StringBuilder slidesBuilder = new StringBuilder();
 				for (Slide slide : slides) {
@@ -142,40 +141,24 @@ public class SliderUtil {
 						renderRequest, null);
 
 				// Slides Animation
-				String effectSelectedValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_EFFECT, "random");
-				String slicesValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_SLICES, "15");
-				String boxColumnValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_BOX_COLUMN, "8");
-				String animationSpeedValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_ANIMATION_SPEED, "500");
-				String pauseTimeValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_PAUSE_TIME, "3000");
-				String startSlideValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_START_SLIDE, "0");
-				String randomSlideValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_RANDOM_SLIDE, "false");
+				String effectSelectedValue = preferences.getValue(SliderParamUtil.SETTINGS_EFFECT, "random");
+				String slicesValue = preferences.getValue(SliderParamUtil.SETTINGS_SLICES, "15");
+				String boxColumnValue = preferences.getValue(SliderParamUtil.SETTINGS_BOX_COLUMN, "8");
+				String animationSpeedValue = preferences.getValue(SliderParamUtil.SETTINGS_ANIMATION_SPEED, "500");
+				String pauseTimeValue = preferences.getValue(SliderParamUtil.SETTINGS_PAUSE_TIME, "3000");
+				String startSlideValue = preferences.getValue(SliderParamUtil.SETTINGS_START_SLIDE, "0");
+				String randomSlideValue = preferences.getValue(SliderParamUtil.SETTINGS_RANDOM_SLIDE, "false");
 
 				// Slides Navigation
-				String directionNav = preferences.getValue(
-						SliderParamUtil.SETTINGS_DIRECTION_NAV, "true");
-				String prevTextValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_PREVIOUS_TEXT, "Prev");
-				String nextTextValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_NEXT_TEXT, "Next");
-				String autoHideNav = preferences.getValue(
-						SliderParamUtil.SETTINGS_AUTO_HIDE_NAV, "false");
-				String controlNavValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_CONTROL_NAV, "true");
-				String keyboardNavValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_KEYBOARD_NAV, "true");
-				String pauseOnHoverValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_PAUSE_ONHOVER, "true");
-				String manualAdvanceValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_MANUAL_ADVANCE, "false");
-				String opacityValue = preferences.getValue(
-						SliderParamUtil.SETTINGS_OPACTIY, "0.8");
+				String directionNav = preferences.getValue(SliderParamUtil.SETTINGS_DIRECTION_NAV, "true");
+				String prevTextValue = preferences.getValue(SliderParamUtil.SETTINGS_PREVIOUS_TEXT, "Prev");
+				String nextTextValue = preferences.getValue(SliderParamUtil.SETTINGS_NEXT_TEXT, "Next");
+				String autoHideNav = preferences.getValue(SliderParamUtil.SETTINGS_AUTO_HIDE_NAV, "false");
+				String controlNavValue = preferences.getValue(SliderParamUtil.SETTINGS_CONTROL_NAV, "true");
+				String keyboardNavValue = preferences.getValue(SliderParamUtil.SETTINGS_KEYBOARD_NAV, "true");
+				String pauseOnHoverValue = preferences.getValue(SliderParamUtil.SETTINGS_PAUSE_ONHOVER, "true");
+				String manualAdvanceValue = preferences.getValue(SliderParamUtil.SETTINGS_MANUAL_ADVANCE, "false");
+				String opacityValue = preferences.getValue(SliderParamUtil.SETTINGS_OPACTIY, "0.8");
 
 				StringBuilder settings = new StringBuilder();
 				settings.append("effect:'" + effectSelectedValue + "'");
@@ -213,43 +196,38 @@ public class SliderUtil {
 		public static Slide getSlide(PortletRequest request, String slideId)
 										throws PortalException, SystemException {
 
-				String portletResource = ParamUtil.getString(request,
-						"portletResource");
-				PortletPreferences portletPreferences = getPreference(request,
-						portletResource);
+				String portletResource = ParamUtil.getString(request, "portletResource");
+				PortletPreferences portletPreferences = getPreference(request,portletResource);
 
 				String[] values = portletPreferences.getValues(slideId, null);
 
 				if (Validator.isNotNull(values)) {
-						return getSlide(slideId, values);
+				    return getSlide(slideId, values);
 				}
 
 				return new Slide();
 		}
 
-		public static Long getSlideId(String slideId) {
+        public static Long getSlideId(String slideId) {
 
-				if (Validator.isNotNull(slideId)) {
-						slideId = slideId.replaceAll("slides_", "");
+            if (Validator.isNotNull(slideId)) {
+                slideId = slideId.replaceAll("slides_", "");
+                return Long.parseLong(slideId);
+            }
 
-						return Long.parseLong(slideId);
-				}
+            return null;
+        }
 
-				return null;
-		}
+        public static Slide getSlide(String slideId, String[] values) {
 
-		public static Slide getSlide(String slideId, String[] values) {
+            String title = values[0];
+            String link = values[1];
+            String desc = values[2];
+            String imageUrl = values[3];
+            String timeMillis = values[4];
+            String order = values[5];
 
-				String title = values[0];
-				String link = values[1];
-				String desc = values[2];
-				String imageUrl = values[3];
-				String timeMillis = values[4];
-				String order = values[5];
-
-				Slide slide = new Slide(slideId, title, link, imageUrl, desc,
-										timeMillis, Integer.parseInt(order));
-				return slide;
-		}
+            return new Slide(slideId, title, link, imageUrl, desc, timeMillis, Integer.parseInt(order));
+        }
 
 }

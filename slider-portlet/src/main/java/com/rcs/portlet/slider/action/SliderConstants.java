@@ -52,4 +52,5 @@ public interface SliderConstants {
 
 		String SLIDE_MOVE_UP = "SLIDE_MOVE_UP";
 
+        String LANGUAGES = "languages";
 }

@@ -25,6 +25,7 @@
 	String portletId = themeDisplay.getPortletDisplay().getId();
 	String doAsUserId = String.valueOf(themeDisplay.getUserId());
 	String doAsGroupId = String.valueOf(themeDisplay.getScopeGroupId());
+    String languageId = themeDisplay.getLanguageId();
 		
 	String connectorURL = themeDisplay.getURLPortal()
 			 + "/html/js/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=";
@@ -94,14 +95,14 @@
                 for (SliderArticle sliderArticle : sliderArticles) {
                  %>
                     <aui:option value="<%= sliderArticle.getArticleId() %>">
-                        <%= sliderArticle.getTitle() %>
+                        <%= sliderArticle.getTitle(languageId) %>
                     </aui:option>
                 <%
                 }
             %>
         </aui:select>
         <aui:button-row>
-            <aui:button name="saveButton" cssClass="save-btn" type="submit" value="add-slide"/>
+            <aui:button name="saveButton" cssClass="save-btn" type="submit" value="button.save"/>
         </aui:button-row>
     </aui:fieldset>
 </aui:form>
