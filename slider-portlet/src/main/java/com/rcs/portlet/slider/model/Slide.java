@@ -40,6 +40,7 @@ public class Slide {
 										int order) {
 
 				id = id.replaceAll("slides_", "");
+                id = id.substring(0, id.indexOf("_"));
 
 				this.id = Long.parseLong(id);
 				this.title = title;

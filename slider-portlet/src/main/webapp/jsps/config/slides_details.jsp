@@ -1,3 +1,4 @@
+<%-- /*=== new version ===*/ --%>
 <%--
 /**
  * Copyright (C) Rotterdam Community Solutions B.V.
@@ -33,7 +34,7 @@
 	// create search container, used to display table
 	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 			SearchContainer.DEFAULT_CUR_PARAM, SearchContainer.DEFAULT_DELTA, portletURL, headerNames,
-			"There No Records");
+			"no-records");
 	
 	portletURL.setParameter(searchContainer.getCurParam(), String.valueOf(searchContainer.getCurValue()));
 		
@@ -54,20 +55,12 @@
 			row.addText(slide.getTitle());
 			row.addText(String.valueOf(slide.getOrder()));
 					
-			row.addJSP("center", SearchEntry.DEFAULT_VALIGN, "/jsps/config/slide_action.jsp",
-					config.getServletContext(), request, response);
+			row.addJSP("center", SearchEntry.DEFAULT_VALIGN, "/jsps/config/slide_action.jsp", config.getServletContext(), request, response);
 
 			resultRows.add(row);
 	}	
 %>
 <liferay-ui:search-iterator searchContainer="<%= searchContainer %>" />
-
-<liferay-portlet:renderURL portletConfiguration="true" var="addSlideURL"></liferay-portlet:renderURL>
-
-<aui:button-row>
-	<aui:button href="<%=addSlideURL%>" value="add-slide"></aui:button>
-</aui:button-row>
-
 </aui:fieldset>
 
 <style>

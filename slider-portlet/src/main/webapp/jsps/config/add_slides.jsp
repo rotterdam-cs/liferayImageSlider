@@ -1,22 +1,23 @@
+<%@ page import="com.rcs.portlet.slider.util.webcontent.SliderArticleUtil" %>
+<%@ page import="com.rcs.portlet.slider.util.webcontent.SliderArticle" %>
+<%--/*=== new version ===*/ --%>
 <%--
 /**
- * Copyright (C) Rotterdam Community Solutions B.V.
- * http://www.rotterdam-cs.com
- *
- ***********************************************************************************************************************
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
- * the License. You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
- * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
- * specific language governing permissions and limitations under the License.
- */
- --%>
- 
- 
+* Copyright (C) Rotterdam Community Solutions B.V.
+* http://www.rotterdam-cs.com
+*
+***********************************************************************************************************************
+*
+* Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
+* the License. You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+* an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+* specific language governing permissions and limitations under the License.
+*/
+--%>
 <%@include file="/init.jsp" %>
 
 <%
@@ -24,6 +25,7 @@
 	String portletId = themeDisplay.getPortletDisplay().getId();
 	String doAsUserId = String.valueOf(themeDisplay.getUserId());
 	String doAsGroupId = String.valueOf(themeDisplay.getScopeGroupId());
+    String languageId = themeDisplay.getLanguageId();
 		
 	String connectorURL = themeDisplay.getURLPortal()
 			 + "/html/js/editor/ckeditor/editor/filemanager/browser/liferay/browser.html?Connector=";
@@ -35,8 +37,7 @@
 	
 	connectorURL += HttpUtil.encodeURL(resourceSelectorParam);
 		
-	String slideId = request.getParameter("slideParamId") != null 
-						? request.getParameter("slideParamId") : "";
+	String slideId = request.getParameter("slideParamId") != null ? request.getParameter("slideParamId") : "";
 						
 	String slideImage = "";				
 	Slide slide = null;
@@ -46,44 +47,33 @@
 	}else{
 			slide = new Slide();
 	}
+
+
 %>
 
 <aui:model-context bean="<%= slide %>" model="<%= Slide.class %>" />
 			
 <liferay-portlet:actionURL portletConfiguration="true" var="actionURL" />
-
-<aui:form action="<%=actionURL.toString()%>" method="post" name="fm">
-
-	<aui:input name="slideId" type="hidden" value="<%=slideId%>" />
-	<aui:input name="<%=SliderConstants.CMD%>" type="hidden" value="<%=SliderConstants.UPDATE%>" />
-	<aui:input name="image" id="slideImage" type="hidden" value="<%=slideImage%>" />
-	
-	<aui:fieldset label="slide.detail">
-			<aui:layout>
-				<aui:column columnWidth="50">
-				
-					<aui:input cssClass="input-text" type="text" name="title" label="Title" />
-					<aui:input cssClass="input-text" type="text" name="link" label="Link" />
-					<aui:input cssClass="input-text" type="textarea" label="Text"
-							rows="3" cols="20" name="desc" />
-					<aui:button-row>
-						<aui:button name="saveButton" cssClass="save-btn" type="submit"
-						value="save" />
-					</aui:button-row>
-				</aui:column>
-	
-				<aui:column columnWidth="50">
-					<br>
-					<b>Image Preview</b>
-					<br>
-					<aui:button name="imageButton" type="button" value="button.choose.image"
-							onClick="selectImage()" />
-					<br>		
-					<img id="imagePreview" src="<%=slideImage%>" width="170" 
-						height="100" style="display:block; margin: 10px 0px;"/>
-				</aui:column>
-			</aui:layout>
-	</aui:fieldset>
+<% List<SliderArticle> sliderArticles = SliderArticleUtil.getAllSliderArticles(renderRequest); %>
+<aui:form action="<%= actionURL.toString() %>" method="post">
+    <aui:input name="slideId" type="hidden" value="<%=slideId%>"/>
+    <aui:input name="<%= SliderConstants.CMD %>" type="hidden" value="<%=SliderConstants.UPDATE%>"/>
+    <aui:fieldset label="slide.detail">
+        <aui:select name="web-content">
+            <%
+                for (SliderArticle sliderArticle : sliderArticles) {
+                 %>
+                    <aui:option value="<%= sliderArticle.getArticleId() %>">
+                        <%= sliderArticle.getTitle(languageId) %>
+                    </aui:option>
+                <%
+                }
+            %>
+        </aui:select>
+        <aui:button-row>
+            <aui:button name="saveButton" cssClass="save-btn" type="submit" value="add-slide"/>
+        </aui:button-row>
+    </aui:fieldset>
 </aui:form>
 			
 <script type="text/javascript">

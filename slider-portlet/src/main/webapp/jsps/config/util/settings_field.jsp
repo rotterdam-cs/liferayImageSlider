@@ -1,5 +1,5 @@
 <%@include file="/init.jsp" %>
-
+<%-- /*=== new version ===*/ --%>
 <%
 	String fieldName = (String)request.getAttribute("slide-name");
 	String fieldValue = (String)request.getAttribute("slide-value");
@@ -19,7 +19,7 @@
 						String[] options = PortletProps.getArray(property);
 						for (String option: options) {
 						%>
-							<aui:option value="<%= option.trim() %>" label="<%= option.trim() %>" 
+							<aui:option value="<%= option.trim() %>" label="<%= option.trim()  %>"
 									selected="<%= (option.trim().equals(fieldValue)) %>" />
 						<%
 						}
@@ -33,7 +33,6 @@
 			<liferay-ui:message key="<%=desc%>"></liferay-ui:message>
 		</aui:column>
 </aui:layout>
-
 <%
 	request.removeAttribute("slide-name");
 	request.removeAttribute("slide-value");

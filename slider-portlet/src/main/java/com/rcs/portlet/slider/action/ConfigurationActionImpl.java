@@ -1,3 +1,4 @@
+/*=== new version ===*/
 /**
  * Copyright (C) Rotterdam Community Solutions B.V.
  * http://www.rotterdam-cs.com
@@ -16,19 +17,6 @@
 
 package com.rcs.portlet.slider.action;
 
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
-import javax.portlet.PortletPreferences;
-import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.ConfigurationAction;
@@ -36,9 +24,16 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.rcs.portlet.slider.model.Slide;
 import com.rcs.portlet.slider.util.SliderUtil;
+import com.rcs.portlet.slider.util.webcontent.SliderArticle;
+import com.rcs.portlet.slider.util.webcontent.SliderArticleUtil;
+
+import javax.portlet.*;
+import java.util.*;
 
 /**
  * @author Rajesh
@@ -203,119 +198,154 @@ public class ConfigurationActionImpl implements ConfigurationAction {
 
 		}
 
-		private void deleteSlide(PortletRequest request,
-										PortletResponse response)
-										throws Exception {
+        private void deleteSlide(PortletRequest request, PortletResponse response) throws Exception {
 
-				String slideId = ParamUtil.getString(request, "slideId", null);
+            String slideId = ParamUtil.getString(request, "slideId", null);
 
-				_log.info("deleteSlide - slideId=" + slideId);
+            _log.info("deleteSlide - slideId=" + slideId);
 
-				if (Validator.isNotNull(slideId)) {
-						String portletResource = ParamUtil.getString(request,
-								"portletResource");
+            if (Validator.isNotNull(slideId)) {
+                String portletResource = ParamUtil.getString(request, "portletResource");
 
-						PortletPreferences preferences = PortletPreferencesFactoryUtil
-														.getPortletSetup(
-																request,
-																portletResource);
-						preferences.reset(slideId);
-						preferences.store();
-				}
-				else {
-						throw new Exception("invalid-slide");
-				}
+                PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 
-		}
+                Enumeration<String> names = preferences.getNames();
+                while (names.hasMoreElements()) {
+
+                    String name = names.nextElement();
+                    if (name.startsWith(slideId)) {
+                        preferences.reset(name);
+                        preferences.store();
+                    }
+
+                }
+
+            } else {
+                throw new Exception("invalid-slide");
+            }
+
+        }
 
 		private void savePreferences(ActionRequest request,
 										ActionResponse response)
 										throws Exception {
 
-				String portletResource = ParamUtil.getString(request,
-						"portletResource");
+				String portletResource = ParamUtil.getString(request, "portletResource");
 
-				PortletPreferences portletPreferences = PortletPreferencesFactoryUtil
-												.getPortletSetup(request,
-														portletResource);
+				PortletPreferences portletPreferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 
-				String slideId = ParamUtil.getString(request, "slideId", null);
-				String title = ParamUtil.getString(request, "title", "");
-				String link = ParamUtil.getString(request, "link", "");
-				String desc = ParamUtil.getString(request, "desc", "");
-				String image = ParamUtil.getString(request, "image", "");
+                ThemeDisplay themeDisplay = (ThemeDisplay) request.getAttribute(WebKeys.THEME_DISPLAY);
 
-				if (_log.isDebugEnabled()) {
-						_log.debug("savePreferences - slideId=" + slideId
-								   + ", title=" + title + ", link=" + link
-								   + ", desc=" + desc + ", image=" + image);
-				}
+                long groupId = themeDisplay.getScopeGroupId();
 
-				verifyParameter(title, link, image);
+                String articleId = ParamUtil.getString(request, "web-content");
 
-				int order = SliderUtil.getLastSlide(request, response);
+                SliderArticle sliderArticle = null;
+                if (articleId != null && !"".equals(articleId)) {
+                    sliderArticle = SliderArticleUtil.getSliderArticle(articleId, groupId);
+                }
 
-				if (_log.isDebugEnabled()) {
-						_log.debug("savePreferences - order=" + order);
-				}
+                if (sliderArticle != null) {
 
-				String[] values = new String[] { title, link, desc, image, String
-												.valueOf((new Date().getTime())), String
-												.valueOf(order) };
+                    /*=== update available languages ===*/
+                    String[] availableLanguages = sliderArticle.getLocales();
+                    String[] preferenceLanguages = portletPreferences.getValues(SliderConstants.LANGUAGES, new String[]{SliderArticle.defaultLanguageId});
+                    List<String> preferencesLanguageList = new ArrayList<String>();
+                    for (String preferenceLanguage: preferenceLanguages) {
+                        preferencesLanguageList.add(preferenceLanguage);
+                    }
+                    for (String availableLanguage: availableLanguages) {
+                        if (!preferencesLanguageList.contains(availableLanguage)) {
+                            preferencesLanguageList.add(availableLanguage);
+                        }
+                    }
+                    int listSize = preferencesLanguageList.size();
+                    String[] updatedLanguages = new String[listSize];
+                    int i = 0;
+                    for (String preferencesLanguage: preferencesLanguageList) {
+                        updatedLanguages[i] = preferencesLanguage;
+                        i++;
+                    }
+                    portletPreferences.setValues(SliderConstants.LANGUAGES, updatedLanguages);
+                    portletPreferences.store();
+                    /*=== update available languages end ===*/
 
-				if (slideId == null || "".equals(slideId.trim())) {
-						slideId = "slides_"
-								  + String.valueOf((new Date()).getTime());
-				}
+                    int currentOrder = SliderUtil.getLastSlide(request, response);
 
-				if (_log.isDebugEnabled())
-						_log.debug("slideId=" + slideId);
+                    for (String currentLanguageId: availableLanguages) {
 
-				portletPreferences.setValues(slideId, values);
-				portletPreferences.store();
+                        String currentTitle = sliderArticle.getTitle(currentLanguageId);
+                        String currentText = sliderArticle.getText(currentLanguageId);
+                        String currentLink = sliderArticle.getLink(currentLanguageId);
+                        String currentImage = sliderArticle.getImage(currentLanguageId);
 
-				response.setRenderParameter("slideParamId", slideId);
-				response.setRenderParameter("slideImage", image);
+                        String[] currentValues = new String[] { currentTitle, currentLink, currentText, currentImage,
+                                articleId, String.valueOf(currentOrder)};
+
+                        String currentSlideId = "slides_" + articleId + "_" + currentLanguageId;
+
+                        portletPreferences.setValues(currentSlideId, currentValues);
+                        portletPreferences.store();
+                    }
+                }
 		}
 
-		private void saveSlideOrder(PortletRequest request,
-										PortletResponse response, Slide slide,
-										int order) throws Exception {
+    public void updateAvailableLocales(String[] availableLanguages, PortletPreferences preferences){
 
-				String portletResource = ParamUtil.getString(request,
-						"portletResource");
 
-				PortletPreferences portletPreferences = PortletPreferencesFactoryUtil
-												.getPortletSetup(request,
-														portletResource);
+    }
 
-				String slideId = "slides_" + slide.getId();
-				String title = slide.getTitle();
-				String link = slide.getLink();
-				String desc = slide.getDesc();
-				String image = slide.getImageUrl();
+    private void saveSlideOrder(PortletRequest request,
+                                PortletResponse response, Slide slide,
+                                int order) throws Exception {
 
-				_log.info("savePreferences - slideId=" + slideId + ", title="
-						  + title + ", link=" + link + ", desc=" + desc
-						  + ", image=" + image + ", order=" + order);
+        String portletResource = ParamUtil.getString(request, "portletResource");
 
-				String[] values = new String[] { title, link, desc, image, String
-												.valueOf(slide.getTimeMillis()), String
-												.valueOf(order) };
+        PortletPreferences preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
 
-				portletPreferences.setValues(slideId, values);
-				portletPreferences.store();
-		}
+        String[] languages = preferences.getValues(SliderConstants.LANGUAGES, new String[]{SliderArticle.defaultLanguageId});
 
-		private void verifyParameter(String title, String link, String image) {
+        for (String languageId : languages) {
 
-				if (Validator.isNull(title)) {
-						throw new IllegalArgumentException("title-invalid");
-				}
-				if (Validator.isNull(image)) {
-						throw new IllegalArgumentException("image-invalid");
-				}
-		}
+            String slideId = "slides_" + slide.getId() + "_" + languageId;
 
-		private Log _log = LogFactoryUtil.getLog(ConfigurationActionImpl.class);
+            Slide currentSlide = SliderUtil.getSlide(request, slideId);
+
+            String title = currentSlide.getTitle();
+            String link = currentSlide.getLink();
+            String desc = currentSlide.getDesc();
+            String image = currentSlide.getImageUrl();
+
+            if (isValid(title, image)) {
+
+                _log.info("savePreferences - slideId=" + slideId + ", title="
+                        + title + ", link=" + link + ", desc=" + desc
+                        + ", image=" + image + ", order=" + order);
+
+                String[] values = new String[]{title, link, desc, image, String
+                        .valueOf(slide.getTimeMillis()), String
+                        .valueOf(order)};
+
+                preferences.setValues(slideId, values);
+                preferences.store();
+
+            }
+        }
+    }
+
+    private boolean isValid(String title, String image){
+        return Validator.isNotNull(title) && Validator.isNotNull(image);
+    }
+
+    private void verifyParameter(String title, String link, String image) {
+
+        if (Validator.isNull(title)) {
+            throw new IllegalArgumentException("title-invalid");
+        }
+        if (Validator.isNull(image)) {
+            throw new IllegalArgumentException("image-invalid");
+        }
+    }
+
+    private Log _log = LogFactoryUtil.getLog(ConfigurationActionImpl.class);
 }

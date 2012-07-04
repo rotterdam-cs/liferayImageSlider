@@ -1,3 +1,4 @@
+<%-- /*=== new version ===*/ --%>
 <%--
 /**
  * Copyright (C) Rotterdam Community Solutions B.V.
@@ -48,15 +49,6 @@ String slideId = "slides_" + slide.getId();
 		url="<%= slideDownURL.toString() %>"
 />
 
-<liferay-portlet:renderURL portletConfiguration="true" var="updateURL" >
-	<liferay-portlet:param name="slideParamId" value="<%=slideId%>" />
-</liferay-portlet:renderURL>
-
-<liferay-ui:icon
-		image="edit"
-		url="<%= updateURL %>"
-/>
-
 <liferay-portlet:renderURL portletConfiguration="true" var="deleteURL" >
 	<liferay-portlet:param name="slideId" value="<%=slideId%>" />
 	<liferay-portlet:param name="<%=SliderConstants.CMD %>" value="<%=SliderConstants.DELETE%>" />
@@ -66,14 +58,9 @@ String slideId = "slides_" + slide.getId();
 <span> 
 	<a href="<%=deleteURL.toString() %>" onclick="return confirmDeleteSlide()" class="taglib-icon">
 	 <img title="Delete"
-	  alt="Delete" src="/html/themes/classic/images/common/delete.png" 
+	  alt="<liferay-ui:message key='slide.delete' />" src="/html/themes/classic/images/common/delete.png"
 	  class="icon">
 	  </a> 
 </span>
-
-<!-- liferay-ui:icon
-		image="delete" label=""
-		url="deleteURL"
-/ -->
 
 
