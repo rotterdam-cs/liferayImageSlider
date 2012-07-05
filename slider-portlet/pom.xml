@@ -13,7 +13,7 @@
 
     <packaging>war</packaging>
 
-	<properties>
+    <properties>
         <jdk.target>1.6</jdk.target>
         <jdk.source>1.6</jdk.source>
         <show.deprecations>false</show.deprecations>
@@ -26,18 +26,10 @@
         <javax.portlet.version>2.0</javax.portlet.version>
 
         <war.name>rcs-slider-portlet</war.name>
+        <liferay.version>6.1.0</liferay.version>
+    </properties>
 
-		<liferay.dir>/home/vitaliy/Work/Liferay/Liferay_6_1/liferay-portal-6.1</liferay.dir>
-		<liferay.auto.deploy.dir>${liferay.dir}/deploy</liferay.auto.deploy.dir>
-		<liferay.version>6.1.0</liferay.version>
-		<liferay.tomcat.dir>${liferay.dir}/tomcat-7.0.23</liferay.tomcat.dir>
-		<liferay.root.dir>${liferay.tomcat.dir}/webapps/ROOT</liferay.root.dir>
-		<liferay.classes.dir>${liferay.root.dir}/WEB-INF/classes</liferay.classes.dir>
-		<liferay.lib.dir>${liferay.root.dir}/WEB-INF/lib</liferay.lib.dir>
-		<liferay.deploy.dir>${liferay.dir}/deploy</liferay.deploy.dir>
-	</properties>
-
-	<dependencies>
+    <dependencies>
 
 		<dependency>
 			<groupId>com.liferay.portal</groupId>
@@ -111,8 +103,27 @@
 
 
     <build>
-
         <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0-alpha-2</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${project.basedir}/src/main/filters/maven.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.5</version>
@@ -187,6 +198,16 @@
             </plugin>
 
         </plugins>
-    </build>
 
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <filters>
+            <filter>src/main/filters/maven.properties</filter>
+        </filters>
+    </build>
 </project>
