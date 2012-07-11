@@ -132,14 +132,14 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
                 <executions>
-                    <execution>
+<!--                    <execution>
                         <id>copy-resources</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <!-- JournalArticleLocalServiceImpl patch -->
+                            &lt;!&ndash; JournalArticleLocalServiceImpl patch &ndash;&gt;
                             <outputDirectory>${liferay.classes.dir}/com/liferay</outputDirectory>
                             <resources>
                                 <resource>
@@ -147,7 +147,7 @@
                                 </resource>
                             </resources>
                         </configuration>
-                    </execution>
+                    </execution>-->
                 </executions>
             </plugin>
 
@@ -170,19 +170,19 @@
                 <version>2.2</version>
                 <configuration>
                     <!-- These classes are in /tomcat-7.0.23/lib/ext directory -->
-                    <packagingExcludes>WEB-INF/**/util/webcontent/**</packagingExcludes>
+                    <!--<packagingExcludes>WEB-INF/**/util/webcontent/**</packagingExcludes>-->
                     <warName>${war.name}</warName>
                     <outputDirectory>${liferay.deploy.dir}</outputDirectory>
                 </configuration>
             </plugin>
 
-            <plugin>
+<!--            <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
                     <finalName>web-content-integration</finalName>
                     <includes>
-                        <!-- To make available from JournalArticleLocalServiceImpl -->
+                        &lt;!&ndash; To make available from JournalArticleLocalServiceImpl &ndash;&gt;
                         <include>**/util/webcontent/**</include>
                     </includes>
                     <outputDirectory>${liferay.dir}/tomcat-7.0.23/lib/ext</outputDirectory>
@@ -195,7 +195,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
 
         </plugins>
 

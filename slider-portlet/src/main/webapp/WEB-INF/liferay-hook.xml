@@ -7,4 +7,9 @@
     <portal-properties>portal-ext.properties</portal-properties>
 
     <language-properties>content/Language.properties</language-properties>
+
+    <service>
+        <service-type>com.liferay.portlet.journal.service.JournalArticleLocalService</service-type>
+        <service-impl>com.rcs.portlet.slider.hook.ExtJournalArticleService</service-impl>
+    </service>
 </hook>
