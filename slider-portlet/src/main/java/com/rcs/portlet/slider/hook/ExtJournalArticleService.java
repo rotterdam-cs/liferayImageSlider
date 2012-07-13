@@ -20,16 +20,14 @@ import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceWrapper;
 import com.rcs.portlet.slider.util.webcontent.SliderArticle;
 import com.rcs.portlet.slider.util.webcontent.SliderArticleUtil;
-
-import javax.portlet.PortletPreferences;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import javax.portlet.PortletPreferences;
 
 public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper {
-
 
     public ExtJournalArticleService(JournalArticleLocalService journalArticleLocalService) {
         super(journalArticleLocalService);
@@ -111,6 +109,10 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
             long groupId = article.getGroupId();
             String articleId = article.getArticleId();
 
+            // alvartaco
+            // The default article locale is not considered in some cases depending LR setup
+            String defaultArticleLocale = article.getDefaultLocale();
+
             //Iterate over layouts
             List<Layout> layouts = LayoutLocalServiceUtil.getLayouts(groupId, false);
             for (Layout layout : layouts) {
@@ -125,24 +127,32 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
                         //Get layout properties - in order to obtain full portletId
                         HashMap<String, String> layoutPropertiesMap = layout.getTypeSettingsProperties();
 
-                        for (String layoutValue: layoutPropertiesMap.values()) {
+                        for (String layoutValue : layoutPropertiesMap.values()) {
 
                             if (layoutValue.startsWith(portletName)) {
 
-                                String portletId = layoutValue;  //full portletId, e.g. 'sliderportlet_WAR_rcssliderportlet_INSTANCE_8WSRZoonaJtj'
-
+                                // alvartaco
+                                // Sometimes the portletid contains data after its name
+                                // the name is the initial part before firs "," if extra info is present
+                                String portletId = null;
+                                if (layoutValue.indexOf(",") > 0) {
+                                    portletId = layoutValue.substring(0, layoutValue.indexOf(","));  //full portletId, e.g. 'sliderportlet_WAR_rcssliderportlet_INSTANCE_8WSRZoonaJtj'
+                                } else {
+                                    portletId = layoutValue;
+                                }
+                                
                                 //get preferences for portlet
                                 List<com.liferay.portal.model.PortletPreferences> portletPrefs = PortletPreferencesLocalServiceUtil.getPortletPreferences(layout.getPlid(), portletId);
 
                                 //iterate over preferences
-                                for (com.liferay.portal.model.PortletPreferences prefs: portletPrefs) {
+                                for (com.liferay.portal.model.PortletPreferences prefs : portletPrefs) {
 
                                     //get javax.portlet.PortletPreferences for portlet
                                     PortletPreferences portletPreferences = PortletPreferencesLocalServiceUtil.getPreferences(portlet.getCompanyId(), prefs.getOwnerId(), prefs.getOwnerType(), layout.getPlid(), portletId);
 
                                     Map<String, String[]> preferencesMap = portletPreferences.getMap();
 
-                                    for (String key: preferencesMap.keySet()) {
+                                    for (String key : preferencesMap.keySet()) {
 
                                         String languageId = locale.toString();
 
@@ -156,12 +166,12 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
                                             String _order = values[5];
 
                                             String updatedValues[] = new String[]{
-                                                    sliderArticle.getTitle(languageId),
-                                                    sliderArticle.getLink(languageId),
-                                                    sliderArticle.getText(languageId),
-                                                    sliderArticle.getImage(languageId),
-                                                    _id,
-                                                    _order
+                                                sliderArticle.getTitle(languageId),
+                                                sliderArticle.getLink(languageId),
+                                                sliderArticle.getText(languageId),
+                                                sliderArticle.getImage(languageId),
+                                                _id,
+                                                _order
                                             };
 
                                             if (_log.isDebugEnabled()) {
@@ -170,6 +180,38 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
 
                                             portletPreferences.setValues(key, updatedValues);
                                             portletPreferences.store();
+                                        }
+                                        
+                                        // alvartaco
+                                        // Always update default locale article
+                                        if (!defaultArticleLocale.equals(languageId)) {
+                                            languageId = defaultArticleLocale;
+
+                                            if (key.contains(articleId) && key.endsWith(languageId)) {
+
+                                                String[] values = preferencesMap.get(key);
+
+                                                SliderArticle sliderArticle = SliderArticleUtil.getSliderArticle(article);
+
+                                                String _id = values[4];
+                                                String _order = values[5];
+
+                                                String updatedValues[] = new String[]{
+                                                    sliderArticle.getTitle(languageId),
+                                                    sliderArticle.getLink(languageId),
+                                                    sliderArticle.getText(languageId),
+                                                    sliderArticle.getImage(languageId),
+                                                    _id,
+                                                    _order
+                                                };
+
+                                                if (_log.isDebugEnabled()) {
+                                                    _log.debug("Update preferences with key='" + key + "' for portlet '" + portletId + "'.");
+                                                }
+
+                                                portletPreferences.setValues(key, updatedValues);
+                                                portletPreferences.store();
+                                            }
                                         }
                                     }
                                 }
@@ -183,6 +225,5 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
         }
 
     }
-
     private static Log _log = LogFactoryUtil.getLog(ExtJournalArticleService.class);
 }
