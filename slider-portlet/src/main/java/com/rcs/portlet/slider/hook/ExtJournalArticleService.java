@@ -16,7 +16,9 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.PortletLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.journal.model.JournalArticle;
+import com.liferay.portlet.journal.model.JournalArticleDisplay;
 import com.liferay.portlet.journal.service.JournalArticleLocalService;
 import com.liferay.portlet.journal.service.JournalArticleLocalServiceWrapper;
 import com.rcs.portlet.slider.util.webcontent.SliderArticle;
@@ -187,5 +189,62 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
         }
 
     }
+
+    @Override
+    public JournalArticleDisplay getArticleDisplay(JournalArticle article, String templateId, String viewMode, String languageId, int page, String xmlRequest, ThemeDisplay themeDisplay) throws PortalException, SystemException {
+
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+        Thread.currentThread().setContextClassLoader(portalClassLoader);
+
+        JournalArticleDisplay articleDisplay = super.getArticleDisplay(article, templateId, viewMode, languageId, page, xmlRequest, themeDisplay);
+
+        Thread.currentThread().setContextClassLoader(currentClassLoader);
+
+        return articleDisplay;
+    }
+
+    @Override
+    public JournalArticleDisplay getArticleDisplay(long groupId, String articleId, double version, String templateId, String viewMode, String languageId, ThemeDisplay themeDisplay) throws PortalException, SystemException {
+
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+        Thread.currentThread().setContextClassLoader(portalClassLoader);
+
+        JournalArticleDisplay articleDisplay = super.getArticleDisplay(groupId, articleId, version, templateId, viewMode, languageId, themeDisplay);//To change body of overridden methods use File | Settings | File Templates.
+
+        Thread.currentThread().setContextClassLoader(currentClassLoader);
+
+        return articleDisplay;
+    }
+
+    @Override
+    public JournalArticleDisplay getArticleDisplay(long groupId, String articleId, String templateId, String viewMode, String languageId, int page, String xmlRequest, ThemeDisplay themeDisplay) throws PortalException, SystemException {
+
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+        Thread.currentThread().setContextClassLoader(portalClassLoader);
+
+        JournalArticleDisplay articleDisplay = super.getArticleDisplay(groupId, articleId, templateId, viewMode, languageId, page, xmlRequest, themeDisplay);//To change body of overridden methods use File | Settings | File Templates.
+
+        Thread.currentThread().setContextClassLoader(currentClassLoader);
+
+        return articleDisplay;
+    }
+
+    @Override
+    public JournalArticleDisplay getArticleDisplay(long groupId, String articleId, String viewMode, String languageId, ThemeDisplay themeDisplay) throws PortalException, SystemException {
+
+        ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
+        ClassLoader portalClassLoader = PortalClassLoaderUtil.getClassLoader();
+        Thread.currentThread().setContextClassLoader(portalClassLoader);
+
+        JournalArticleDisplay articleDisplay = super.getArticleDisplay(groupId, articleId, viewMode, languageId, themeDisplay);//To change body of overridden methods use File | Settings | File Templates.
+
+        Thread.currentThread().setContextClassLoader(currentClassLoader);
+
+        return articleDisplay;
+    }
+
     private static Log _log = LogFactoryUtil.getLog(ExtJournalArticleService.class);
 }
