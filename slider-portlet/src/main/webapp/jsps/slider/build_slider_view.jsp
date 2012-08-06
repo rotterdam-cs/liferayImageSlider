@@ -59,9 +59,9 @@
 <link rel="stylesheet" href="<%=renderRequest.getContextPath()%>/css/<%=themeValue%>/<%=themeValue%>.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="<%=renderRequest.getContextPath()%>/css/nivo-slider.css" type="text/css" media="screen" />
 
-<%@include file="/jsps/config/js/jquery-1.7.2.min.js.jsp" %>
+<%--@include file="/jsps/config/js/jquery-1.7.2.min.js.jsp" --%>
 
-<script type="text/javascript" src="<%=renderRequest.getContextPath()%>/js/jquery.nivo.slider.pack.js"></script>
+<%--script type="text/javascript" src="<%=renderRequest.getContextPath()%>/js/jquery.nivo.slider.pack.js"></script--%>
 
 <script type="text/javascript">
 	$(window).load(function() {

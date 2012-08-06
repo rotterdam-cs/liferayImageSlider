@@ -8,6 +8,8 @@
 		<configuration-action-class>com.rcs.portlet.slider.action.ConfigurationActionImpl</configuration-action-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/css/main.css</header-portlet-css>
+                <header-portlet-javascript>/js/jquery-1.7.1.min.js</header-portlet-javascript>
+                <header-portlet-javascript>/js/jquery.nivo.slider.pack.js</header-portlet-javascript>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>rotterdam-slider-portlet</css-class-wrapper>
 	</portlet>
