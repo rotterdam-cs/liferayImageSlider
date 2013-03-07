@@ -232,17 +232,19 @@ public class ExtJournalArticleService extends JournalArticleLocalServiceWrapper 
     }
 
     @Override
-    public void deleteJournalArticle(long id) throws PortalException, SystemException {
+    public JournalArticle deleteJournalArticle(long id) throws PortalException, SystemException {
         setPortalClassLoader();
-        super.deleteJournalArticle(id);
+        JournalArticle ja = super.deleteJournalArticle(id);
         setSliderClassLoader();
+	return ja;
     }
 
     @Override
-    public void deleteJournalArticle(JournalArticle journalArticle) throws SystemException {
+    public JournalArticle deleteJournalArticle(JournalArticle journalArticle) throws SystemException {
         setPortalClassLoader();
-        super.deleteJournalArticle(journalArticle);
+        JournalArticle ja = super.deleteJournalArticle(journalArticle);
         setSliderClassLoader();
+	return ja;
     }
 
     @Override
